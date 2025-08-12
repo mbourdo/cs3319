@@ -1,5 +1,5 @@
 # Hospital Management SQL Project
-### CS319 - Databases
+### CS3319 - Databases
 
 This project is a sample hospital management database built using SQL.  
 It models relationships between doctors, nurses, patients, and work assignments.  
