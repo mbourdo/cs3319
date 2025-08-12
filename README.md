@@ -11,4 +11,4 @@ The database includes tables for each entity, sample data, and queries that demo
 - Ran advanced queries to analyze relationships and constraints within the database.
 
 ## ER Diagram
-![ER Diagram](diagrams/ERDiagram.drawio.png)
+![ER Diagram](diagrams/29_ERDiagram.drawio.png)
