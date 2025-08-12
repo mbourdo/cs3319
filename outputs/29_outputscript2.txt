@@ -1,0 +1,564 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+--------------
+SELECT * FROM nurse
+--------------
+
++---------+-----------+----------+------------+-----------------+
+| nurseid | firstname | lastname | startdate  | reporttonurseid |
++---------+-----------+----------+------------+-----------------+
+| AAAA1   | Hannah    | Montana  | 2020-03-03 | NULL            |
+| BBBB2   | Alex      | Russo    | 2018-07-10 | HHHH8           |
+| CCCC3   | Justin    | Russo    | 2015-06-12 | BBBB2           |
+| DDDD4   | Max       | Russo    | 2017-05-15 | BBBB2           |
+| EEEE5   | Miley     | Stewart  | 2019-08-20 | NULL            |
+| FFFF6   | Lilly     | Truscott | 2021-02-14 | EEEE5           |
+| GGGG7   | Oliver    | Oken     | 2016-11-30 | EEEE5           |
+| HHHH8   | Harper    | Finkle   | 2014-09-25 | NULL            |
++---------+-----------+----------+------------+-----------------+
+8 rows in set (0.00 sec)
+
+--------------
+UPDATE nurse SET lastname = 'Cyrus' WHERE firstname = 'Miley'
+--------------
+
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+--------------
+UPDATE nurse AS n
+JOIN workingfor AS wf ON n.nurseid = wf.nurseid
+JOIN doctor AS d ON wf.docid = d.docid
+SET n.startdate = d.startdate
+WHERE d.lastname = 'Tanaka'
+--------------
+
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+--------------
+SELECT * FROM nurse
+--------------
+
++---------+-----------+----------+------------+-----------------+
+| nurseid | firstname | lastname | startdate  | reporttonurseid |
++---------+-----------+----------+------------+-----------------+
+| AAAA1   | Hannah    | Montana  | 2020-03-03 | NULL            |
+| BBBB2   | Alex      | Russo    | 2010-04-20 | HHHH8           |
+| CCCC3   | Justin    | Russo    | 2010-04-20 | BBBB2           |
+| DDDD4   | Max       | Russo    | 2017-05-15 | BBBB2           |
+| EEEE5   | Miley     | Cyrus    | 2019-08-20 | NULL            |
+| FFFF6   | Lilly     | Truscott | 2021-02-14 | EEEE5           |
+| GGGG7   | Oliver    | Oken     | 2010-04-20 | EEEE5           |
+| HHHH8   | Harper    | Finkle   | 2010-04-20 | NULL            |
++---------+-----------+----------+------------+-----------------+
+8 rows in set (0.00 sec)
+
+--------------
+INSERT INTO doctor (docid, firstname, lastname, birthdate, startdate) VALUES ('DOC10', 'Gregory', 'House', '2003-02-15', '2020-01-01')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO patient (ohip, firstname, lastname, weight, birthdate, height, treatsdocid)VALUES ('295512515', 'James', 'Wilson', 80, '1970-08-17', 2.11, 'DOC10')
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+INSERT INTO nurse (nurseid, firstname, lastname, startdate, reporttonurseid) VALUES ('NRS10', 'Blake', 'Lively', '2018-07-11', 'BBBB2')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+INSERT INTO workingfor (docid, nurseid, hours) VALUES ('DOC10','NRS10',50)
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-------+-----------+-----------+------------+------------+
+| docid | firstname | lastname  | birthdate  | startdate  |
++-------+-----------+-----------+------------+------------+
+| AGD56 | Sean      | Aziz      | 1985-02-23 | 2015-08-14 |
+| DOC10 | Gregory   | House     | 2003-02-15 | 2020-01-01 |
+| HIT45 | Scott     | Mortensen | 1960-11-07 | 2000-12-01 |
+| JKK78 | Jon       | Joselyn   | 1980-09-19 | 2012-03-25 |
+| RAD34 | Sue       | Tanaka    | 1978-06-15 | 2010-04-20 |
+| SEE66 | Colleen   | Tyler     | 1965-01-30 | 1999-09-10 |
+| YRT67 | Gerry     | Webster   | 1972-04-11 | 2005-07-18 |
++-------+-----------+-----------+------------+------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM patient
+--------------
+
++-----------+-----------+------------+--------+------------+--------+-------------+
+| ohip      | firstname | lastname   | weight | birthdate  | height | treatsdocid |
++-----------+-----------+------------+--------+------------+--------+-------------+
+| 000000000 | Milhouse  | Van Houten |     60 | 1985-07-15 |   1.70 | RAD34       |
+| 111111111 | Homer     | Simpson    |     66 | 1987-02-02 |   1.81 | AGD56       |
+| 222222222 | Marge     | Simpson    |     58 | 1990-03-19 |   1.72 | RAD34       |
+| 295512515 | James     | Wilson     |     80 | 1970-08-17 |   2.11 | DOC10       |
+| 333333333 | Bart      | Simpson    |     40 | 2010-04-01 |   1.55 | AGD56       |
+| 444444444 | Lisa      | Simpson    |     30 | 2012-05-09 |   1.45 | AGD56       |
+| 555555555 | Maggie    | Simpson    |     20 | 2020-06-21 |   0.91 | AGD56       |
+| 666666666 | Ned       | Flanders   |     80 | 1968-01-15 |   1.75 | YRT67       |
+| 777777777 | Jon       | Burns      |     70 | 1930-02-22 |   1.68 | YRT67       |
+| 888888888 | Rod       | Flanders   |     45 | 2000-11-05 |   1.60 | SEE66       |
+| 999999999 | Todd      | Flanders   |     50 | 1999-12-12 |   1.65 | SEE66       |
++-----------+-----------+------------+--------+------------+--------+-------------+
+11 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM nurse
+--------------
+
++---------+-----------+----------+------------+-----------------+
+| nurseid | firstname | lastname | startdate  | reporttonurseid |
++---------+-----------+----------+------------+-----------------+
+| AAAA1   | Hannah    | Montana  | 2020-03-03 | NULL            |
+| BBBB2   | Alex      | Russo    | 2010-04-20 | HHHH8           |
+| CCCC3   | Justin    | Russo    | 2010-04-20 | BBBB2           |
+| DDDD4   | Max       | Russo    | 2017-05-15 | BBBB2           |
+| EEEE5   | Miley     | Cyrus    | 2019-08-20 | NULL            |
+| FFFF6   | Lilly     | Truscott | 2021-02-14 | EEEE5           |
+| GGGG7   | Oliver    | Oken     | 2010-04-20 | EEEE5           |
+| HHHH8   | Harper    | Finkle   | 2010-04-20 | NULL            |
+| NRS10   | Blake     | Lively   | 2018-07-11 | BBBB2           |
++---------+-----------+----------+------------+-----------------+
+9 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM workingfor
+--------------
+
++-------+---------+-------+
+| docid | nurseid | hours |
++-------+---------+-------+
+| AGD56 | BBBB2   |    55 |
+| AGD56 | CCCC3   |    55 |
+| AGD56 | DDDD4   |    75 |
+| AGD56 | GGGG7   |    15 |
+| DOC10 | NRS10   |    50 |
+| JKK78 | GGGG7   |     7 |
+| JKK78 | HHHH8   |   200 |
+| RAD34 | BBBB2   |   100 |
+| RAD34 | CCCC3   |   242 |
+| RAD34 | GGGG7   |    10 |
+| RAD34 | HHHH8   |    22 |
+| SEE66 | BBBB2   |   100 |
+| SEE66 | CCCC3   |    55 |
+| SEE66 | GGGG7   |    20 |
+| YRT67 | EEEE5   |    33 |
+| YRT67 | FFFF6   |   100 |
+| YRT67 | GGGG7   |     5 |
++-------+---------+-------+
+17 rows in set (0.00 sec)
+
+--------------
+SELECT lastname FROM patient
+--------------
+
++------------+
+| lastname   |
++------------+
+| Van Houten |
+| Simpson    |
+| Simpson    |
+| Wilson     |
+| Simpson    |
+| Simpson    |
+| Simpson    |
+| Flanders   |
+| Burns      |
+| Flanders   |
+| Flanders   |
++------------+
+11 rows in set (0.00 sec)
+
+--------------
+SELECT DISTINCT lastname FROM patient
+--------------
+
++------------+
+| lastname   |
++------------+
+| Van Houten |
+| Simpson    |
+| Wilson     |
+| Flanders   |
+| Burns      |
++------------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM doctor ORDER BY startdate
+--------------
+
++-------+-----------+-----------+------------+------------+
+| docid | firstname | lastname  | birthdate  | startdate  |
++-------+-----------+-----------+------------+------------+
+| SEE66 | Colleen   | Tyler     | 1965-01-30 | 1999-09-10 |
+| HIT45 | Scott     | Mortensen | 1960-11-07 | 2000-12-01 |
+| YRT67 | Gerry     | Webster   | 1972-04-11 | 2005-07-18 |
+| RAD34 | Sue       | Tanaka    | 1978-06-15 | 2010-04-20 |
+| JKK78 | Jon       | Joselyn   | 1980-09-19 | 2012-03-25 |
+| AGD56 | Sean      | Aziz      | 1985-02-23 | 2015-08-14 |
+| DOC10 | Gregory   | House     | 2003-02-15 | 2020-01-01 |
++-------+-----------+-----------+------------+------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT ohip, firstname, lastname, weight 
+FROM patient 
+WHERE weight >= 50 
+ORDER BY weight
+--------------
+
++-----------+-----------+------------+--------+
+| ohip      | firstname | lastname   | weight |
++-----------+-----------+------------+--------+
+| 999999999 | Todd      | Flanders   |     50 |
+| 222222222 | Marge     | Simpson    |     58 |
+| 000000000 | Milhouse  | Van Houten |     60 |
+| 111111111 | Homer     | Simpson    |     66 |
+| 777777777 | Jon       | Burns      |     70 |
+| 295512515 | James     | Wilson     |     80 |
+| 666666666 | Ned       | Flanders   |     80 |
++-----------+-----------+------------+--------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT p.firstname, p.lastname 
+FROM patient AS p 
+JOIN doctor AS d ON p.treatsdocid = d.docid 
+WHERE d.lastname = 'Tanaka'
+--------------
+
++-----------+------------+
+| firstname | lastname   |
++-----------+------------+
+| Milhouse  | Van Houten |
+| Marge     | Simpson    |
++-----------+------------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT d.firstname AS doctor_firstname, d.lastname AS doctor_lastname, 
+       p.firstname AS patient_firstname, p.lastname AS patient_lastname
+FROM doctor AS d
+LEFT JOIN patient AS p ON d.docid = p.treatsdocid
+--------------
+
++------------------+-----------------+-------------------+------------------+
+| doctor_firstname | doctor_lastname | patient_firstname | patient_lastname |
++------------------+-----------------+-------------------+------------------+
+| Sean             | Aziz            | Homer             | Simpson          |
+| Sean             | Aziz            | Bart              | Simpson          |
+| Sean             | Aziz            | Lisa              | Simpson          |
+| Sean             | Aziz            | Maggie            | Simpson          |
+| Gregory          | House           | James             | Wilson           |
+| Scott            | Mortensen       | NULL              | NULL             |
+| Jon              | Joselyn         | NULL              | NULL             |
+| Sue              | Tanaka          | Milhouse          | Van Houten       |
+| Sue              | Tanaka          | Marge             | Simpson          |
+| Colleen          | Tyler           | Rod               | Flanders         |
+| Colleen          | Tyler           | Todd              | Flanders         |
+| Gerry            | Webster         | Ned               | Flanders         |
+| Gerry            | Webster         | Jon               | Burns            |
++------------------+-----------------+-------------------+------------------+
+13 rows in set (0.00 sec)
+
+--------------
+SELECT firstname, lastname FROM doctor 
+WHERE docid NOT IN (SELECT treatsdocid FROM patient)
+--------------
+
++-----------+-----------+
+| firstname | lastname  |
++-----------+-----------+
+| Scott     | Mortensen |
+| Jon       | Joselyn   |
++-----------+-----------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT SUM(wf.hours) / COUNT(DISTINCT n.nurseid) AS avg_hours
+FROM workingfor AS wf 
+JOIN nurse AS n ON wf.nurseid = n.nurseid
+--------------
+
++-----------+
+| avg_hours |
++-----------+
+|  143.0000 |
++-----------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT n1.firstname AS "Nurse First Name", n1.lastname AS "Nurse Last Name", 
+       n2.firstname AS "Supervisor First Name", n2.lastname AS "Supervisor Last Name"
+FROM nurse AS n1
+LEFT JOIN nurse AS n2 ON n1.reporttonurseid = n2.nurseid
+--------------
+
++------------------+-----------------+-----------------------+----------------------+
+| Nurse First Name | Nurse Last Name | Supervisor First Name | Supervisor Last Name |
++------------------+-----------------+-----------------------+----------------------+
+| Hannah           | Montana         | NULL                  | NULL                 |
+| Alex             | Russo           | Harper                | Finkle               |
+| Justin           | Russo           | Alex                  | Russo                |
+| Max              | Russo           | Alex                  | Russo                |
+| Miley            | Cyrus           | NULL                  | NULL                 |
+| Lilly            | Truscott        | Miley                 | Cyrus                |
+| Oliver           | Oken            | Miley                 | Cyrus                |
+| Harper           | Finkle          | NULL                  | NULL                 |
+| Blake            | Lively          | Alex                  | Russo                |
++------------------+-----------------+-----------------------+----------------------+
+9 rows in set (0.00 sec)
+
+--------------
+SELECT n.firstname AS "Nurse First Name", 
+       n.lastname AS "Nurse Last Name", 
+       SUM(wf.hours) AS "Total Hours", CONCAT('$', FORMAT(SUM(wf.hours) * 30, 2)) AS "Total Pay"
+FROM nurse AS n
+JOIN workingfor AS wf ON n.nurseid = wf.nurseid
+GROUP BY n.nurseid
+ORDER BY SUM(wf.hours) DESC
+--------------
+
++------------------+-----------------+-------------+------------+
+| Nurse First Name | Nurse Last Name | Total Hours | Total Pay  |
++------------------+-----------------+-------------+------------+
+| Justin           | Russo           |         352 | $10,560.00 |
+| Alex             | Russo           |         255 | $7,650.00  |
+| Harper           | Finkle          |         222 | $6,660.00  |
+| Lilly            | Truscott        |         100 | $3,000.00  |
+| Max              | Russo           |          75 | $2,250.00  |
+| Oliver           | Oken            |          57 | $1,710.00  |
+| Blake            | Lively          |          50 | $1,500.00  |
+| Miley            | Cyrus           |          33 | $990.00    |
++------------------+-----------------+-------------+------------+
+8 rows in set (0.00 sec)
+
+--------------
+SELECT p.firstname AS patient_firstname, p.lastname AS patient_lastname, 
+       n.firstname AS nurse_firstname, n.lastname AS nurse_lastname
+FROM patient AS p
+JOIN doctor AS d ON p.treatsdocid = d.docid
+JOIN workingfor AS wf ON d.docid = wf.docid
+JOIN nurse AS n ON wf.nurseid = n.nurseid
+ORDER BY p.firstname
+--------------
+
++-------------------+------------------+-----------------+----------------+
+| patient_firstname | patient_lastname | nurse_firstname | nurse_lastname |
++-------------------+------------------+-----------------+----------------+
+| Bart              | Simpson          | Alex            | Russo          |
+| Bart              | Simpson          | Justin          | Russo          |
+| Bart              | Simpson          | Max             | Russo          |
+| Bart              | Simpson          | Oliver          | Oken           |
+| Homer             | Simpson          | Alex            | Russo          |
+| Homer             | Simpson          | Justin          | Russo          |
+| Homer             | Simpson          | Max             | Russo          |
+| Homer             | Simpson          | Oliver          | Oken           |
+| James             | Wilson           | Blake           | Lively         |
+| Jon               | Burns            | Miley           | Cyrus          |
+| Jon               | Burns            | Lilly           | Truscott       |
+| Jon               | Burns            | Oliver          | Oken           |
+| Lisa              | Simpson          | Alex            | Russo          |
+| Lisa              | Simpson          | Justin          | Russo          |
+| Lisa              | Simpson          | Max             | Russo          |
+| Lisa              | Simpson          | Oliver          | Oken           |
+| Maggie            | Simpson          | Alex            | Russo          |
+| Maggie            | Simpson          | Justin          | Russo          |
+| Maggie            | Simpson          | Max             | Russo          |
+| Maggie            | Simpson          | Oliver          | Oken           |
+| Marge             | Simpson          | Alex            | Russo          |
+| Marge             | Simpson          | Justin          | Russo          |
+| Marge             | Simpson          | Oliver          | Oken           |
+| Marge             | Simpson          | Harper          | Finkle         |
+| Milhouse          | Van Houten       | Alex            | Russo          |
+| Milhouse          | Van Houten       | Justin          | Russo          |
+| Milhouse          | Van Houten       | Oliver          | Oken           |
+| Milhouse          | Van Houten       | Harper          | Finkle         |
+| Ned               | Flanders         | Miley           | Cyrus          |
+| Ned               | Flanders         | Lilly           | Truscott       |
+| Ned               | Flanders         | Oliver          | Oken           |
+| Rod               | Flanders         | Alex            | Russo          |
+| Rod               | Flanders         | Justin          | Russo          |
+| Rod               | Flanders         | Oliver          | Oken           |
+| Todd              | Flanders         | Alex            | Russo          |
+| Todd              | Flanders         | Justin          | Russo          |
+| Todd              | Flanders         | Oliver          | Oken           |
++-------------------+------------------+-----------------+----------------+
+37 rows in set (0.00 sec)
+
+--------------
+SELECT p.firstname AS " Patient First", p.lastname AS "Patient Last", 
+       TIMESTAMPDIFF(YEAR, p.birthdate, CURDATE()) AS "Patient age", p.birthdate AS "Patient Birthdate", 
+       d.firstname AS "Dr First", d.lastname AS "Dr Last", 
+       TIMESTAMPDIFF(YEAR, d.birthdate, CURDATE()) AS "Dr age", d.birthdate AS "Dr Birth Date"
+FROM patient AS p
+JOIN doctor AS d ON p.treatsdocid = d.docid
+WHERE TIMESTAMPDIFF(YEAR, p.birthdate, CURDATE()) > TIMESTAMPDIFF(YEAR, d.birthdate, CURDATE())
+--------------
+
++---------------+--------------+-------------+-------------------+----------+---------+--------+---------------+
+| Patient First | Patient Last | Patient age | Patient Birthdate | Dr First | Dr Last | Dr age | Dr Birth Date |
++---------------+--------------+-------------+-------------------+----------+---------+--------+---------------+
+| James         | Wilson       |          54 | 1970-08-17        | Gregory  | House   |     21 | 2003-02-15    |
+| Ned           | Flanders     |          56 | 1968-01-15        | Gerry    | Webster |     52 | 1972-04-11    |
+| Jon           | Burns        |          94 | 1930-02-22        | Gerry    | Webster |     52 | 1972-04-11    |
++---------------+--------------+-------------+-------------------+----------+---------+--------+---------------+
+3 rows in set, 1 warning (0.00 sec)
+
+--------------
+SELECT DISTINCT n.firstname, n.lastname
+FROM nurse AS n
+JOIN workingfor AS wf ON n.nurseid = wf.nurseid
+JOIN doctor AS d ON wf.docid = d.docid
+WHERE d.lastname != 'Tanaka'
+--------------
+
++-----------+----------+
+| firstname | lastname |
++-----------+----------+
+| Alex      | Russo    |
+| Justin    | Russo    |
+| Max       | Russo    |
+| Oliver    | Oken     |
+| Blake     | Lively   |
+| Harper    | Finkle   |
+| Miley     | Cyrus    |
+| Lilly     | Truscott |
++-----------+----------+
+8 rows in set (0.00 sec)
+
+--------------
+SELECT n.firstname, n.lastname, COUNT(wf.docid) AS num_doctors
+FROM nurse AS n
+JOIN workingfor AS wf ON n.nurseid = wf.nurseid
+GROUP BY n.nurseid
+HAVING COUNT(wf.docid) > 1
+--------------
+
++-----------+----------+-------------+
+| firstname | lastname | num_doctors |
++-----------+----------+-------------+
+| Alex      | Russo    |           3 |
+| Justin    | Russo    |           3 |
+| Oliver    | Oken     |           5 |
+| Harper    | Finkle   |           2 |
++-----------+----------+-------------+
+4 rows in set (0.00 sec)
+
+--------------
+SELECT firstname, lastname, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age
+FROM doctor
+WHERE TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 30
+--------------
+
++-----------+----------+------+
+| firstname | lastname | age  |
++-----------+----------+------+
+| Gregory   | House    |   21 |
++-----------+----------+------+
+1 row in set (0.00 sec)
+
+--------------
+CREATE VIEW doctor_patient_count AS
+SELECT d.firstname, d.lastname, COUNT(p.ohip) AS numofpat
+FROM doctor AS d
+LEFT JOIN patient AS p ON d.docid = p.treatsdocid
+GROUP BY d.docid
+--------------
+
+Query OK, 0 rows affected (0.01 sec)
+
+--------------
+SELECT * FROM doctor_patient_count WHERE numofpat = 2
+--------------
+
++-----------+----------+----------+
+| firstname | lastname | numofpat |
++-----------+----------+----------+
+| Sue       | Tanaka   |        2 |
+| Colleen   | Tyler    |        2 |
+| Gerry     | Webster  |        2 |
++-----------+----------+----------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-------+-----------+-----------+------------+------------+
+| docid | firstname | lastname  | birthdate  | startdate  |
++-------+-----------+-----------+------------+------------+
+| AGD56 | Sean      | Aziz      | 1985-02-23 | 2015-08-14 |
+| DOC10 | Gregory   | House     | 2003-02-15 | 2020-01-01 |
+| HIT45 | Scott     | Mortensen | 1960-11-07 | 2000-12-01 |
+| JKK78 | Jon       | Joselyn   | 1980-09-19 | 2012-03-25 |
+| RAD34 | Sue       | Tanaka    | 1978-06-15 | 2010-04-20 |
+| SEE66 | Colleen   | Tyler     | 1965-01-30 | 1999-09-10 |
+| YRT67 | Gerry     | Webster   | 1972-04-11 | 2005-07-18 |
++-------+-----------+-----------+------------+------------+
+7 rows in set (0.00 sec)
+
+--------------
+DELETE FROM doctor WHERE docid = 'HIT45'
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++-------+-----------+----------+------------+------------+
+| docid | firstname | lastname | birthdate  | startdate  |
++-------+-----------+----------+------------+------------+
+| AGD56 | Sean      | Aziz     | 1985-02-23 | 2015-08-14 |
+| DOC10 | Gregory   | House    | 2003-02-15 | 2020-01-01 |
+| JKK78 | Jon       | Joselyn  | 1980-09-19 | 2012-03-25 |
+| RAD34 | Sue       | Tanaka   | 1978-06-15 | 2010-04-20 |
+| SEE66 | Colleen   | Tyler    | 1965-01-30 | 1999-09-10 |
+| YRT67 | Gerry     | Webster  | 1972-04-11 | 2005-07-18 |
++-------+-----------+----------+------------+------------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT COUNT(*) AS doctor_count FROM doctor
+--------------
+
++--------------+
+| doctor_count |
++--------------+
+|            6 |
++--------------+
+1 row in set (0.01 sec)
+
+--------------
+DELETE FROM doctor WHERE docid = 'RAD34'
+--------------
+
+ERROR 1451 (23000) at line 153: Cannot delete or update a parent row: a foreign key constraint fails (`assign2db`.`patient`, CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`treatsdocid`) REFERENCES `doctor` (`docid`) ON DELETE RESTRICT)
+--------------
+SELECT COUNT(*) AS doctor_count FROM doctor
+--------------
+
++--------------+
+| doctor_count |
++--------------+
+|            6 |
++--------------+
+1 row in set (0.02 sec)
+
+Bye
